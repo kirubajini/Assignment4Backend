@@ -1,0 +1,33 @@
+package com.Book.security;
+
+
+import java.io.IOException;
+
+import javax.naming.AuthenticationException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
+
+
+
+@Component
+public class BasicAuthEntryPoint extends BasicAuthenticationEntryPoint {
+	private static final Logger logger = LoggerFactory.getLogger(BasicAuthEntryPoint.class);
+	
+	public void commence(HttpServletRequest request, HttpServletResponse response, 
+    		AuthenticationException authException)
+      throws IOException {
+		logger.error("Unauthorized error: {}", authException.getMessage());
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
+    }
+	
+	@Override
+    public void afterPropertiesSet() {
+        setRealmName("BasicAuth");
+        super.afterPropertiesSet();
+    }
+}
